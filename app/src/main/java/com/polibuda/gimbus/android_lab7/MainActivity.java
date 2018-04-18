@@ -6,8 +6,8 @@ import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.TextView;
 
@@ -40,20 +40,20 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
 
     @Override
     public void onSensorChanged(SensorEvent event) {
-        switch (event.sensor.getType()){
-            case Sensor.TYPE_ACCELEROMETER:{
+        switch (event.sensor.getType()) {
+            case Sensor.TYPE_ACCELEROMETER: {
                 StringBuilder builder = new StringBuilder();
                 builder.append("x: ");
-                builder.append(String.format("%7.4f",event.values[0]));
+                builder.append(String.format("%7.4f", event.values[0]));
                 builder.append(" y: ");
-                builder.append(String.format("%7.4f",event.values[1]));
+                builder.append(String.format("%7.4f", event.values[1]));
                 builder.append(" z: ");
-                builder.append(String.format("%7.4f",event.values[2]));
+                builder.append(String.format("%7.4f", event.values[2]));
                 accel.setText(builder.toString());
             }
-            case Sensor.TYPE_LIGHT:{
+            case Sensor.TYPE_LIGHT: {
                 StringBuilder builder = new StringBuilder();
-                builder.append(String.format("%7.4f",event.values[0]));
+                builder.append(String.format("%7.4f", event.values[0]));
                 builder.append(" lumen");
                 light.setText(builder.toString());
             }

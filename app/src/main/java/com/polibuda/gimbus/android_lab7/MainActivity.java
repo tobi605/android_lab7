@@ -13,15 +13,14 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.widget.RelativeLayout;
-import android.widget.TextView;
 
 public class MainActivity extends AppCompatActivity implements SensorEventListener {
 
+    static boolean gpsActive = true;
+    static boolean otherActive = false;
     private RelativeLayout layout;
     private SensorManager manager;
     private Sensor accelSensor;
-    static boolean gpsActive = true;
-    static boolean otherActive = false;
     private double x;
     private double y;
     private double z;
@@ -31,9 +30,8 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         layout = findViewById(R.id.main_layout);
-
         manager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
-        accelSensor = manager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
+        accelSensor = manager != null ? manager.getDefaultSensor(Sensor.TYPE_GAME_ROTATION_VECTOR) : null;
     }
 
     @Override
@@ -49,11 +47,11 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()){
-            case R.id.menu_colours:{
+        switch (item.getItemId()) {
+            case R.id.menu_colours: {
                 break;
             }
-            case R.id.menu_compass:{
+            case R.id.menu_compass: {
                 gpsActive = false;
                 otherActive = true;
                 startActivity(new Intent(MainActivity.this, CompassActivity.class));
@@ -65,15 +63,12 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
 
     @Override
     public void onSensorChanged(SensorEvent event) {
-        switch (event.sensor.getType()) {
-            case Sensor.TYPE_ACCELEROMETER: {
-                x = -1*((event.values[0]/9.81)*255.0);
-                y = -1*((event.values[1]/9.81)*255.0);
-                z = -1*((event.values[2]/9.81)*255.0);
-                int color = (int)(x+y+z);
-                layout.setBackgroundColor(color);
-            }
-        }
+        double max = accelSensor.getMaximumRange();
+        x = Math.abs((event.values[0] / max) * 255.0);
+        y = Math.abs((event.values[1] / max) * 255.0);
+        z = Math.abs((event.values[2] / max) * 255.0);
+        int color = Color.rgb((int) x, (int) y, (int) z);
+        layout.setBackgroundColor(color);
     }
 
     @Override
@@ -84,7 +79,7 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
     @Override
     protected void onResume() {
         super.onResume();
-        manager.registerListener(this, accelSensor, SensorManager.SENSOR_DELAY_NORMAL);
+        manager.registerListener(this, accelSensor, SensorManager.SENSOR_DELAY_GAME);
     }
 
     @Override

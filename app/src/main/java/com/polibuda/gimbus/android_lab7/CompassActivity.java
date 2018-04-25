@@ -14,7 +14,7 @@ import android.view.animation.Animation;
 import android.view.animation.RotateAnimation;
 import android.widget.ImageView;
 
-public class CompassActivity extends AppCompatActivity implements SensorEventListener{
+public class CompassActivity extends AppCompatActivity implements SensorEventListener {
     private SensorManager manager;
     private Sensor accelerometer;
     private Sensor magnetometer;
@@ -34,8 +34,8 @@ public class CompassActivity extends AppCompatActivity implements SensorEventLis
         setContentView(R.layout.activity_compass);
         arrow = findViewById(R.id.image_needle);
         manager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
-        accelerometer = manager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
-        magnetometer = manager.getDefaultSensor(Sensor.TYPE_MAGNETIC_FIELD);
+        accelerometer = manager != null ? manager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER) : null;
+        magnetometer = manager != null ? manager.getDefaultSensor(Sensor.TYPE_MAGNETIC_FIELD) : null;
         manager.registerListener(this, accelerometer, SensorManager.SENSOR_DELAY_GAME);
         manager.registerListener(this, magnetometer, SensorManager.SENSOR_DELAY_GAME);
     }
@@ -66,14 +66,14 @@ public class CompassActivity extends AppCompatActivity implements SensorEventLis
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()){
-            case R.id.menu_colours:{
+        switch (item.getItemId()) {
+            case R.id.menu_colours: {
                 MainActivity.gpsActive = true;
                 MainActivity.otherActive = false;
                 onBackPressed();
                 break;
             }
-            case R.id.menu_compass:{
+            case R.id.menu_compass: {
                 break;
             }
         }
@@ -93,7 +93,7 @@ public class CompassActivity extends AppCompatActivity implements SensorEventLis
             SensorManager.getRotationMatrix(mR, null, mLastAccelerometer, mLastMagnetometer);
             SensorManager.getOrientation(mR, mOrientation);
             float azimuthInRadians = mOrientation[0];
-            float azimuthInDegress = (float)(Math.toDegrees(azimuthInRadians)+360)%360;
+            float azimuthInDegress = (float) (Math.toDegrees(azimuthInRadians) + 360) % 360;
             RotateAnimation ra = new RotateAnimation(
                     mCurrentDegree,
                     -azimuthInDegress,

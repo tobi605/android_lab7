@@ -13,12 +13,14 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 
 public class MainActivity extends AppCompatActivity implements SensorEventListener {
 
     static boolean gpsActive = true;
     static boolean otherActive = false;
     private RelativeLayout layout;
+    private TextView textView;
     private SensorManager manager;
     private Sensor accelSensor;
     private double x;
@@ -30,6 +32,7 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         layout = findViewById(R.id.main_layout);
+        textView = findViewById(R.id.x);
         manager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
         accelSensor = manager != null ? manager.getDefaultSensor(Sensor.TYPE_GAME_ROTATION_VECTOR) : null;
     }
@@ -68,7 +71,9 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
         y = Math.abs((event.values[1] / max) * 255.0);
         z = Math.abs((event.values[2] / max) * 255.0);
         int color = Color.rgb((int) x, (int) y, (int) z);
+        int textcolor = Color.rgb((int)(255-x),(int)(255-y),(int)(255-z));
         layout.setBackgroundColor(color);
+        textView.setTextColor(textcolor);
     }
 
     @Override

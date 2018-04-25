@@ -19,7 +19,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".GPSActivity"></activity>
+        <activity android:name=".CompassActivity"></activity>
     </application>
 
 </manifest>

@@ -8,6 +8,9 @@ import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
 
@@ -18,6 +21,8 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
     private SensorManager manager;
     private Sensor lightSensor;
     private Sensor accelSensor;
+    public static boolean gpsActive = true;
+    public static boolean otherActive = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -29,13 +34,33 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
         manager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
         lightSensor = manager.getDefaultSensor(Sensor.TYPE_LIGHT);
         accelSensor = manager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
+    }
 
-        findViewById(R.id.button).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startActivity(new Intent(MainActivity.this, GPSActivity.class));
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.menu, menu);
+        menu.getItem(0).setEnabled(otherActive);
+        menu.getItem(0).setChecked(!otherActive);
+        menu.getItem(1).setEnabled(gpsActive);
+        menu.getItem(1).setChecked(!gpsActive);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()){
+            case R.id.menu_sensors:{
+                break;
             }
-        });
+            case R.id.menu_gps:{
+                gpsActive = false;
+                otherActive = true;
+                startActivity(new Intent(MainActivity.this, GPSActivity.class));
+                break;
+            }
+        }
+        return true;
     }
 
     @Override

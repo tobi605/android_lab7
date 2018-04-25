@@ -23,13 +23,4 @@
         android:layout_centerHorizontal="true"
         android:layout_centerVertical="true" />
 
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/button"
-        android:layout_below="@+id/accel_val"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="20dp"
-        android:text="GPS" />
-
 </RelativeLayout>
